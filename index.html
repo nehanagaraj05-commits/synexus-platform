@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Standard Meta Tags -->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Title -->
+    <title>Community Platform | Day 01</title>
+
+    <!-- CSS Link (For Day 02, leaving it commented out for now) -->
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <script type="module" src="main.js"></script>
+    <script type="module" src="components/UserCard.js"></script>
+    <script type="module" src="components/CartCounter.js"></script>
+    <script type="module" src="components/ProductButton.js"></script>
+    <script type="module" src="components/CustomModal.js"></script>
+  </head>
+  <body>
+    <!-- ========================================== -->
+    <!-- YOUR DAY 1 ARCHITECTURE STARTS BELOW HERE  -->
+    <!-- ========================================== -->
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <template id="modal-template">
+      <style>
+        :host {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.6);
+          z-index: 2000;
+          align-items: center;
+          justify-content: center;
+        }
+        :host([open]) {
+          display: flex;
+        }
+        .backdrop {
+          background: var(--card-bg);
+          color: var(--text-color);
+          border-radius: 8px;
+          padding: 1.5rem;
+          max-width: 450px;
+          width: 90%;
+        }
+        .modal-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 2px solid #eee;
+          margin-bottom: 1rem;
+          padding-bottom: 0.5rem;
+        }
+        ::slotted(h2) {
+          margin: 0;
+          font-size: 1.3rem;
+        }
+        .close-btn {
+          background: none;
+          border: none;
+          font-size: 1.5rem;
+          cursor: pointer;
+          color: var(--text-color);
+        }
+      </style>
+
+      <div class="backdrop">
+        <div class="modal-header">
+          <slot name="title">Default Title Placeholder</slot>
+          <button class="close-btn" id="internal-close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <slot>Default body content goes here.</slot>
+        </div>
+      </div>
+    </template>
+    <header role="banner">
+      <nav role="navigation">
+        <div class="logo">CommunityPlatform</div>
+        <button
+          class="menu-toggle"
+          aria-label="Toggle Menu"
+          aria-expanded="false"
+        >
+          ☰
+        </button>
+        <button id="theme-toggle">🌙</button>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#initiatives">Initiatives</a></li>
+          <li><a href="#core-team">Core Team</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- Hint: Start with your Header and Navigation! -->
+    <main role="main" id="app-root">
+      <section id="home">
+        <h1>Empowering the Next Generation of Engineers</h1>
+        <a href="#initiatives" class="btn-cta">Explore Our Initiatives</a>
+      </section>
+
+      <section id="about">
+        <h2>About Us</h2>
+        <p>
+          We are a group of student engineers building, learning, and shipping
+          projects together — turning curiosity into real-world skill.
+        </p>
+      </section>
+
+      <section id="initiatives">
+        <h2>Our Initiatives</h2>
+        <input
+          type="text"
+          id="search-projects"
+          placeholder="Search initiatives..."
+        />
+        <div class="initiatives-grid" id="dynamic-grid"></div>
+      </section>
+
+      <section id="core-team">
+        <h2>Core Team</h2>
+        <div class="team-grid">
+          <user-card
+            name="Anant Sharma"
+            role="Founder, Synexus"
+            avatar="anant.jfif"
+          ></user-card>
+          <user-card
+            name="Abhay Adithya R S"
+            role="Chief Coordination Officer, Synexus"
+            avatar="abhay1.jfif"
+          ></user-card>
+          <user-card
+            name="P V Pavithra"
+            role="Chief Operating Officer, Synexus"
+            avatar="pavithra.jfif"
+          ></user-card>
+          <user-card
+            name="Harshit Singh"
+            role="Community Lead, Synexus"
+            avatar="harshit.jfif"
+          ></user-card>
+        </div>
+      </section>
+      <section id="testimonials">
+        <h2>Community Testimonials</h2>
+        <div id="testimonial-container">
+          <h3 id="testimonial-name"></h3>
+          <p id="testimonial-quote"></p>
+        </div>
+      </section>
+      <section id="task-tracker">
+        <h2>Challenge Task Tracker</h2>
+        <div class="task-input-row">
+          <input type="text" id="task-input" placeholder="Add a new task..." />
+          <button id="add-task-btn" class="btn-cta">Add Task</button>
+        </div>
+        <ul id="task-list"></ul>
+      </section>
+      <section class="join-community" id="join">
+        <h2>Join The Engineering Community</h2>
+        <p>Standard, not a trend. Build with us.</p>
+
+        <form class="membership-form" action="#" method="POST">
+          <div class="form-group">
+            <label for="fullName"
+              >Full Name <span class="required">*</span></label
+            >
+            <input
+              type="text"
+              id="fullName"
+              name="fullName"
+              placeholder="Jane Doe"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="emailAddress"
+              >Student Email <span class="required">*</span></label
+            >
+            <input
+              type="email"
+              id="emailAddress"
+              name="emailAddress"
+              placeholder="jane@student.edu"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="motivation">Why do you want to join?</label>
+            <textarea
+              id="motivation"
+              name="motivation"
+              rows="4"
+              placeholder="I want to solve actual problems..."
+            ></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit">Submit Application</button>
+        </form>
+      </section>
+      <section id="kanban-board">
+        <h2>Kanban Board</h2>
+        <div class="kanban-columns">
+          <div class="kanban-column" data-status="todo">
+            <h3>To Do</h3>
+            <div class="task-list">
+              <div class="task-card" draggable="true">
+                Design the landing page
+              </div>
+              <div class="task-card" draggable="true">Write API docs</div>
+            </div>
+          </div>
+
+          <div class="kanban-column" data-status="progress">
+            <h3>In Progress</h3>
+            <div class="task-list">
+              <div class="task-card" draggable="true">Fix search bug</div>
+            </div>
+          </div>
+
+          <div class="kanban-column" data-status="done">
+            <h3>Done</h3>
+            <div class="task-list">
+              <div class="task-card" draggable="true">Setup repo</div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="dev-lookup">
+        <h2>Community Contributor Lookup</h2>
+        <div class="lookup-input-row">
+          <input
+            type="text"
+            id="github-username"
+            placeholder="Enter GitHub username"
+          />
+        </div>
+        <div id="dev-profile-card"></div>
+        <div id="repos-grid" class="initiatives-grid"></div>
+      </section>
+      <section id="propose-initiative">
+        <h2>Propose an Initiative</h2>
+        <form id="proposal-form" class="membership-form">
+          <div class="form-group">
+            <label for="proposal-title"
+              >Title <span class="required">*</span></label
+            >
+            <input
+              type="text"
+              id="proposal-title"
+              name="title"
+              placeholder="Project name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="proposal-description"
+              >Description <span class="required">*</span></label
+            >
+            <textarea
+              id="proposal-description"
+              name="description"
+              rows="4"
+              placeholder="What problem does this solve?"
+              required
+            ></textarea>
+          </div>
+
+          <button type="submit" id="proposal-submit-btn" class="btn-submit">
+            Submit Proposal
+          </button>
+        </form>
+        <div id="proposal-feedback"></div>
+      </section>
+      <section id="manage-proposal">
+        <h2>Manage Proposal</h2>
+        <p>Simulating an edit/delete on proposal <strong>ID: 1</strong></p>
+        <div class="manage-btn-row">
+          <button id="update-btn" class="btn-cta">Update Proposal</button>
+          <button id="delete-btn" class="btn-danger">Delete Proposal</button>
+        </div>
+        <div id="manage-feedback"></div>
+      </section>
+      <section id="paginated-feed">
+        <h2>Community Feed</h2>
+        <div id="data-feed"></div>
+        <div id="scroll-sentinel" class="loading-spinner">Loading more...</div>
+      </section>
+      <section id="dashboard">
+        <h2>Contributor Dashboard</h2>
+        <div class="lookup-input-row">
+          <input
+            type="text"
+            id="dashboard-search"
+            placeholder="Enter GitHub username for full dashboard"
+          />
+        </div>
+        <div id="dashboard-view"></div>
+      </section>
+      <section id="live-terminal">
+        <h2>
+          Live Connection Terminal
+          <span id="connection-status">🔴 Offline</span>
+        </h2>
+        <div id="live-feed"></div>
+        <div class="lookup-input-row">
+          <input type="text" id="ws-input" placeholder="Type a message..." />
+          <button id="ws-send" class="btn-cta">Send</button>
+        </div>
+      </section>
+      <section id="worker-demo">
+        <h2>Background Processing Demo</h2>
+        <div class="spinner"></div>
+        <div class="manage-btn-row">
+          <button id="process-btn" class="btn-cta">Run Heavy Process</button>
+          <button id="terminate-btn" class="btn-danger">Cancel Process</button>
+        </div>
+        <div id="computation-output"></div>
+      </section>
+      <section id="live-stats">
+        <h2>Live Platform Stats</h2>
+        <p id="theme-status-display"></p>
+      </section>
+      <section id="reactive-components-demo">
+        <h2>Reactive Components Demo</h2>
+        <div id="cart-counter-slot">
+          <cart-counter></cart-counter>
+        </div>
+        <div class="manage-btn-row">
+          <product-button
+            product-id="101"
+            product-name="Pro License"
+          ></product-button>
+          <product-button
+            product-id="102"
+            product-name="Enterprise License"
+          ></product-button>
+        </div>
+        <button
+          id="toggle-counter-btn"
+          class="btn-cta"
+          style="margin-top: 15px"
+        >
+          Remove/Re-add Counter (test cleanup)
+        </button>
+      </section>
+      <section id="modal-demo">
+        <h2>Composable Modal Demo</h2>
+        <div class="manage-btn-row">
+          <button id="open-delete-modal" class="btn-danger">
+            Show Delete Warning
+          </button>
+          <button id="open-welcome-modal" class="btn-cta">
+            Show Welcome Modal
+          </button>
+        </div>
+
+        <custom-modal id="delete-modal">
+          <h2 slot="title" style="color: #dc2626">⚠️ Data Deletion Warning</h2>
+          <p>
+            Are you absolutely sure you want to permanently delete this record?
+          </p>
+        </custom-modal>
+
+        <custom-modal id="welcome-modal">
+          <h2 slot="title">🎉 Welcome to the Platform</h2>
+          <p>
+            Your account has been successfully verified. Please set up your
+            profile.
+          </p>
+        </custom-modal>
+      </section>
+    </main>
+
+    <footer role="contentinfo">
+      <p>&copy; 2026 Synexus Community. All rights reserved.</p>
+      <ul>
+        <li><a href="#">LinkedIn</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">GitHub</a></li>
+      </ul>
+    </footer>
+    <div id="project-modal" class="modal-overlay" style="display: none">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modal-title">Project Title</h3>
+          <button id="close-modal" class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>
+            More details about this specific initiative will load here
+            dynamically.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- ========================================== -->
+    <!-- YOUR DAY 1 ARCHITECTURE ENDS ABOVE HERE    -->
+    <!-- ========================================== -->
+  </body>
+</html>
