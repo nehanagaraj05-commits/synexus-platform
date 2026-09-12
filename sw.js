@@ -2,20 +2,23 @@
 /* sw.js: The Service Worker Background Proxy */
 /* ========================================== */
 
-const CACHE_NAME = "platform-cache-v1";
-
+const CACHE_NAME = "platform-cache-v4"; 
 const ASSETS_TO_CACHE = [
-  "./",
-  "./index.html",
-  "./style.css",
-  "./main.js",
-  "./api.js",
-  "./utils.js",
-  "./websocket.js",
-  "./db.js",
-  "./worker.js",
+    "./",
+    "./index.html",
+    "./style.css",
+    "./main.js",
+    "./api.js",
+    "./utils.js",
+    "./websocket.js",
+    "./db.js",
+    "./worker.js",
+    "./store.js",
+    "./components/UserCard.js",
+    "./components/CartCounter.js",
+    "./components/ProductButton.js",
+    "./components/CustomModal.js"
 ];
-
 self.addEventListener("install", (event) => {
   console.log("[Service Worker] Installing phase...");
 
