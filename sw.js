@@ -2,7 +2,7 @@
 /* sw.js: The Service Worker Background Proxy */
 /* ========================================== */
 
-const CACHE_NAME = "platform-cache-v4"; 
+const CACHE_NAME = "platform-cache-v5"; 
 const ASSETS_TO_CACHE = [
     "./",
     "./index.html",
