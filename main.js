@@ -676,50 +676,51 @@ function initLiveTerminal() {
 // ==========================================
 
 let routes = {};
+let homePath = "/"; // will be corrected in buildRoutes()
 
 function buildRoutes() {
-  const appRoot = document.getElementById("app-root");
-  const homeHTML = appRoot.innerHTML;
+    const appRoot = document.getElementById("app-root");
+    const homeHTML = appRoot.innerHTML;
+    homePath = window.location.pathname; // e.g. "/synexus-platform/" on GitHub Pages, "/" locally
 
-  routes = {
-    "/": homeHTML,
-    404: `
+    routes = {
+        [homePath]: homeHTML,
+        404: `
             <div class="view-container" style="padding:60px 50px;text-align:center;">
                 <h1>404</h1>
                 <p>Page not found.</p>
                 <a href="/">Go Home</a>
             </div>
         `,
-  };
+    };
 }
 
 function router() {
-  let path = window.location.pathname;
-  if (path.includes("index.html")) path = "/";
+    let path = window.location.pathname;
+    if (path.includes("index.html")) path = homePath;
 
-  const viewHTML = routes[path] || routes[404];
-  document.getElementById("app-root").innerHTML = viewHTML;
+    const viewHTML = routes[path] || routes[404];
+    document.getElementById("app-root").innerHTML = viewHTML;
 
-  if (path === "/") {
-    initInitiativesSearch();
-    initProjectModal();
-    initTestimonials();
-    initTaskTracker();
-    initKanbanBoard();
-    initFormValidation();
-    initDevLookup();
-    initProposalForm();
-    initProposalManagement();
-    initInfiniteScrollFeed();
-    initDashboard();
-    initLiveTerminal();
-    initWorkerDemo();
-    initLiveStats();
-    initReactiveComponentsDemo();
-    initModalDemo();
-  }
+    if (path === homePath) {
+        initInitiativesSearch();
+        initProjectModal();
+        initTestimonials();
+        initTaskTracker();
+        initKanbanBoard();
+        initFormValidation();
+        initDevLookup();
+        initProposalForm();
+        initProposalManagement();
+        initInfiniteScrollFeed();
+        initDashboard();
+        initLiveTerminal();
+        initWorkerDemo();
+        initLiveStats();
+        initReactiveComponentsDemo();
+        initModalDemo();
+    }
 }
-
 // ==========================================
 // 4. ENGINE INITIALIZATION
 // ==========================================
